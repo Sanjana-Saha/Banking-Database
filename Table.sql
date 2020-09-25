@@ -17,3 +17,35 @@ alter table Create_savings_Account
 add constraint uniqueid unique(User_Id)
 
 select * from Create_Savings_Account 
+
+
+create table Admin_Login (Admin_Id varchar(20) primary key,Admin_Password varchar(20) not null)
+
+
+create table Admin_Desicion(Approval_Number int identity(101,1) primary key,
+Admin_Id varchar(20) not null Foreign key references Admin_Login(Admin_Id),
+User_Id varchar(8) not null Foreign key references Create_Savings_Account(User_Id),
+Approval_Given bit default 0,Approval_Date date default (Getdate()))
+
+create table Debit_Card(Debitcard_number bigint identity(1000000000,4) primary key,
+User_Id varchar(8) not null Foreign key references Create_Savings_Account(User_Id)
+,cvv as RIGHT('000' + CAST(Debitcard_number AS VARCHAR(3)), 1) PERSISTED not null ,
+Expiry_Date date default ('28-12-2030'),card_status bit default 0)
+
+create table Savings_Account_Details(Account_Number bigint identity(59000000,1) primary key,
+User_Id varchar(8) not null Foreign key references Create_Savings_Account(User_Id),
+Available_Balance Decimal(20) not null default 0,
+User_pass AS 'Pass' + RIGHT('0000000000' + CAST(Account_Number AS VARCHAR(8)), 5) PERSISTED not null,
+User_Transaction_pass AS 'TransPass' + RIGHT('0000000000' + CAST(Account_Number AS VARCHAR(8)), 5) PERSISTED not null,
+Lock_Account bit default 0
+)
+create table AddBeneficiary(Beneficiary_Account_Number bigint primary key,Beneficiary_Name varchar(20),Nickname varchar(10))
+
+create table Transactions(Transaction_Id bigint identity(10000000,3) primary key,
+User_Id varchar(8) not null Foreign key references Create_Savings_Account(User_Id),
+From_Account_Number bigint not null Foreign key references Savings_Account_Details(Account_Number),
+To_Account_Number bigint not null Foreign key references AddBeneficiary(Beneficiary_Account_Number),
+Amount_Transferred decimal(20) not null,Available_Balance decimal(20) not null,
+Transaction_Date date default (Getdate()),Transaction_Type varchar(10) not null check(Transaction_Type in('NEFT','IMPS','RTGS')),
+Transaction_Status bit default 1
+)
