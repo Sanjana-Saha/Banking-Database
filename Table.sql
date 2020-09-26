@@ -43,3 +43,15 @@ AmountTransferred decimal(20) not null,AvailableBalance decimal(20) not null,
 TransactionDate date default (Getdate()),TransactionType varchar(10) not null check(TransactionType in('NEFT','IMPS','RTGS')),
 TransactionStatus bit default 1
 )
+
+alter table SavingsAccountDetails
+drop column  userpass 
+
+alter table SavingsAccountDetails
+drop column  userTransactionpass
+
+alter table SavingsAccountDetails
+add UserTransactionPass varchar(20)
+
+alter table SavingsAccountDetails
+add UserPass varchar(20)
