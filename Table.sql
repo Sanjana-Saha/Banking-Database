@@ -3,14 +3,15 @@ go
 use Bank
 --drop database Bank
 
-create table CreateSavingsAccount(ReferenceId int Identity(101,1) Primary key clustered,
- UserId AS 'LTI' + RIGHT('00000' + CAST(ReferenceId AS VARCHAR(5)), 5) PERSISTED,
+create table CreateSavingsAccount(ReferenceId int Identity(101,1) unique,
+ UserId AS 'LTI' + RIGHT('00000' + CAST(ReferenceId AS VARCHAR(5)), 5) PERSISTED primary key not null,
 Title varchar(5) not null,FirstName varchar(20) Not Null,MiddleName varchar(20),LastName varchar(20) Not Null
 ,FatherName varchar(25) Not null,MobileNumber Bigint Not Null,EmailId varchar(30),AadharNumber bigint not null,
 DateOfBirth date not null,ResAddress1 varchar(100) not null,ResAddress2 varchar(100) not null,
 ResLandmark varchar(100),ResCity varchar(20) not null,ResState varchar(30) not null,ResPincode bigint not null,
 PerAddress1 varchar(100) not null,PerAddress2 varchar(100) not null,
 PerLandmark varchar(100),PerCity varchar(20) not null,PerState varchar(30) not null,PerPincode bigint not null,
+
 OccupationType varchar(20) not null,SourceIncome varchar(20) not null,GrossIncome bigint not null,
 DebitcardOpted bit default 0,AccountStatus bit default 0,AccountRejected bit default 0)
 
@@ -20,6 +21,10 @@ alter table CreatesavingsAccount
 add constraint uniqueid unique(UserId)
 
 select * from CreateSavingsAccount 
+
+
+OccupationType varchar(20) not null,SourceIncome varchar(20) not null,GrossIncome Decimal(20) not null,
+DebitcardOpted bit default 0,AccountStatus bit default 0,AccountRejected bit default 0)
 
 
 create table AdminLogin (AdminId varchar(20) primary key,AdminPassword varchar(20) not null)
@@ -66,6 +71,7 @@ TransactionDate date default (Getdate()),TransactionType varchar(10) not null ch
 TransactionStatus bit default 1
 )
 
+
 insert into SavingsAccountDetails(UserId,UserPass,UserTransactionPass)
 values('LTI00101','gopi12','gopitransac')
 select * from SavingsAccountDetails
@@ -104,3 +110,16 @@ values('67000000','Nihal','Niku')
 
 insert into AddBeneficiary
 values('77000007','Kunal','Raman')
+
+alter table SavingsAccountDetails
+drop column  userpass 
+
+alter table SavingsAccountDetails
+drop column  userTransactionpass
+
+alter table SavingsAccountDetails
+add UserTransactionPass varchar(20)
+
+alter table SavingsAccountDetails
+add UserPass varchar(20)
+
