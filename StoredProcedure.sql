@@ -33,6 +33,17 @@ from Transactions
 WHERE UserId=@uid 
 ORDER BY TransactionDate Desc,TransactionId desc
 end
+                                              
+--1)Store Procedure for Register for Net Banking
+create proc proc_NetBanking @AccNumber bigint, @LoginPassword nvarchar(100), @TransactionPassword nvarchar(100)
+as begin
+update SavingsAccountDetails
+set UserPass=@LoginPassword,UserTransactionPass=@TransactionPassword
+where AccountNumber=@AccNumber
+end
+go
+                                               
+
 
 
 
@@ -82,16 +93,3 @@ as
 insert into Transactions (UserId,FromAccountNumber,ToAccountNumber,AmountTransferred,AvailableBalance
 ,TransactionDate,TransactionType,TransactionStatus)values (@userid,@from,@to,@amount,@avail,@date,@type,@status)
 
-                                                                                                      
-A).Create a/c Proc
-  create proc proc_insertIntoCreateSavingsAccount(@title nvarchar(5),@fname nvarchar(20),@mname nvarchar(20),@lname nvarchar(20),
-@fathername nvarchar(20),@mob bigint,@mail nvarchar(30),@aadhar bigint,@dob date,@resadd1 nvarchar(100),
-@resadd2 nvarchar(100),@reslm nvarchar(100),@rescity nvarchar(20),@resstate nvarchar(30),@respin bigint,
-@peradd1 nvarchar(100),@peradd2 nvarchar(100),@perlm nvarchar(100),@percity nvarchar(20),@perstate nvarchar(30),
-@perpin bigint,@occ nvarchar(20),@source nvarchar(20),@gross bigint)
-as
-insert into CreateSavingsAccount(title,FirstName,MiddleName,LastName,FatherName,MobileNumber,EmailId,AadharNumber,
-DateOfBirth,ResAddress1,ResAddress2,ResLandmark,ResCity,ResState,ResPincode,PerAddress1,PerAddress2,PerLandmark,
-PerCity,PerState,PerPincode,OccupationType,SourceIncome,GrossIncome)
-values(@title,@fname,@mname,@lname,@fathername,@mob,@mail,@aadhar,@dob,@resadd1,
-@resadd2,@reslm,@rescity,@resstate,@respin,@peradd1,@peradd2,@perlm,@percity,@perstate,@perpin,@occ,@source,@gross)
